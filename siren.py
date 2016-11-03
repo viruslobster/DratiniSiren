@@ -3,14 +3,45 @@ import cv2
 import numpy
 import pygame
 
-DRATINI_THRESH = 28500000.0
+DRATINI_THRESH = 85000000.0
+username = 'pokebot8311a@gmail.com'
+password = 'pokebot8311a!'
+emails = []
+
+def send_email(user, pwd, recipient, subject, body):
+    import smtplib
+
+    gmail_user = user
+    gmail_pwd = pwd
+    FROM = user
+    TO = recipient if type(recipient) is list else [recipient]
+    SUBJECT = subject
+    TEXT = body
+
+    # Prepare actual message
+    message = """From: %s\nTo: %s\nSubject: %s\n\n%s
+    """ % (FROM, ", ".join(TO), SUBJECT, TEXT)
+    try:
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.ehlo()
+        server.starttls()
+        server.login(gmail_user, gmail_pwd)
+        server.sendmail(FROM, TO, message)
+        server.close()
+        print 'sent email'
+    except:
+    	print "failed to send mail"
+
 
 def dratini_bitches():
+    for email in emails :
+        send_email(username, password, email, '', 'Dratini!!!');
     pygame.mixer.init()
     pygame.mixer.music.load("siren.mp3")
     pygame.mixer.music.play()
     while pygame.mixer.music.get_busy() == True:
         continue
+
 
 stdin = sys.stdin.read()
 array = numpy.frombuffer(stdin, dtype='uint8')
